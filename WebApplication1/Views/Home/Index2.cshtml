@@ -1,0 +1,13 @@
+﻿@model IEnumerable<string>
+@{
+    Layout = null;
+    ViewData["Title"] = "Index2";
+}
+
+<h2>Index2</h2>
+<ul>
+    @foreach (string s in Model) {
+        <li>@s</li>
+    }
+</ul>
+

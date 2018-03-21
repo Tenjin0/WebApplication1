@@ -1,0 +1,20 @@
+﻿@model IEnumerable<string>
+@{
+    Layout = null;
+    ViewData["Title"] = "ListResponses";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Language Features</title>
+</head>
+<body>
+    <ul>
+        @foreach (string s in Model) {
+            <li>@s</li>
+        }
+    </ul>
+</body>
+</html>
+
