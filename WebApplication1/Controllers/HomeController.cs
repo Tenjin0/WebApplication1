@@ -111,7 +111,10 @@ namespace LanguageFeatures.Controllers
                 $"Name Total: { priceFilterTotal:C2}",
             });
         }
-    }
 
-   
+        public async Task<ViewResult> Index5() {
+            long? length = await MyAsyncMethods.GetPageLenghtAwait();
+            return View(new string[] { $"Length: {length}"});
+        }
+    }
 }
