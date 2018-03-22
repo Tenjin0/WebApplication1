@@ -12,12 +12,14 @@ namespace LanguageFeatures.Controllers
         public IActionResult Index() {
 
             List<string> results = new List<string>();
+
             Dictionary<string, Product> products = new Dictionary<string, Product> {
                 //{ "Kayak", new Product { Name = "Kayak", Price = 275M } },
                 //{ "Lifejacket", new Product { Name = "LifeJacket", Price = 48.95M } }
                 ["Kayak"] =  new Product { Name = "Kayak", Price = 275M },
                 ["Lifejacket"] = new Product { Name = "LifeJacket", Price = 48.95M }
             };
+
             foreach (Product p in Product.GetProducts()) {
                 string name = p?.Name ?? "No Name";
                 decimal? price = p?.Price ?? 0;
@@ -60,11 +62,53 @@ namespace LanguageFeatures.Controllers
                 new Product { Name = "Soccer Ball", Price = 19.50M },
                 new Product { Name = "Corner flag", Price = 34.95M }
             };
+
             decimal cartTotal = cart.TotalPrices();
-            decimal arrayTotal = productArray.FilterPrice(20).TotalPrices();
+            decimal priceFilterTotal = productArray.FilterByPrice(20).TotalPrices();
+            decimal nameFilterTotal = productArray.FilterByName('S').TotalPrices();
+
             return View("Index2", new String[] {
                 $"Cart Total: { cartTotal:C2}",
-                $"Array Total: { arrayTotal:C2}",
+                $"Price Total: { priceFilterTotal:C2}",
+                $"Name Total: { priceFilterTotal:C2}",
+            });
+        }
+
+        bool FilterByPrice(Product p) {
+            return (p?.Price ?? 0) >= 20;
+        }
+
+        public bool EvaluateProduct(Product p, int count) {
+            return (p?.Price ?? 0) >= count;
+        }
+
+        public IActionResult Index4() {
+
+            ShoppingCart cart = new ShoppingCart { Products = Product.GetProducts() };
+
+            Product[] productArray = {
+                new Product { Name = "Kayak", Price = 275M },
+                new Product { Name = "LifeJacket", Price = 48.95M },
+                new Product { Name = "Soccer Ball", Price = 19.50M },
+                new Product { Name = "Corner flag", Price = 34.95M }
+            };
+
+
+            Func<Product, bool> FilterByName = delegate (Product prod) {
+                return prod?.Name?[0] == 'S';
+            };
+            
+            
+            decimal cartTotal = cart.TotalPrices();
+            //decimal priceFilterTotal = productArray.Filter(p => (p?.Price ?? 0) >= 20).TotalPrices();
+            decimal priceFilterTotal = productArray.Filter(p => EvaluateProduct(p, 20)).TotalPrices();
+            //decimal nameFilterTotal = productArray.Filter(p => p?.Name?[0] == 'S').TotalPrices();
+            decimal nameFilterTotal = productArray.Filter(p => p?.Name?[0] == 'S').TotalPrices();
+
+            return View("Index2", new String[] {
+                $"Cart Total: { cartTotal:C2}",
+                $"Price Total: { priceFilterTotal:C2}",
+                $"Name Total: { priceFilterTotal:C2}",
             });
         }
     }
